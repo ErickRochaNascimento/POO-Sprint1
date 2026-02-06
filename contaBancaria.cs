@@ -2,13 +2,20 @@
 
 class contaBancaria
 {
+    private List<ContaCorrente> contascorrente = new List<ContaCorrente>();
 
-    public string nomeTitular;
-    public int numeroConta;
-    public decimal saldo;
-    
+
+    public string NomeTitular { get; set; }
+    public int NumeroConta { get; set; }
+    public decimal Saldo { get; set; }
+
+
+
     public void ExibirInformacaoConta()
     {
-        Console.WriteLine($"Conta informações: \n Nome titular{nomeTitular} \n Numero conta: {numeroConta} \n Saldo: {saldo}");
+        Console.WriteLine($"Conta informações: \n Nome titular: {NomeTitular} \n Numero conta: {NumeroConta} \n Saldo: {Saldo}");
     }
+
+  
+
 }
