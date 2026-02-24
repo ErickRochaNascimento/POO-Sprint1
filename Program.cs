@@ -32,16 +32,23 @@ public abstract class ContaBancaria
 
     public virtual void Saque(decimal valor)
     {
-        if (Saldo > valor)
-        {
-            Saldo -= valor;
-            Console.WriteLine($"Saque realizado com sucesso. Saldo atual: {Saldo}");
+        bool saqueRealizado = false;
 
-        }
-        else
+        do
         {
-            Console.WriteLine($"Saldo insuficiente para realizar o saque. \n Saldo: {Saldo}");
-        }
+            if (Saldo > valor)
+            {
+                Saldo -= valor;
+                Console.WriteLine($"Saque realizado com sucesso. Saldo atual: {Saldo}");
+                saqueRealizado = true;
+
+            }
+            else
+            {
+                Console.WriteLine($"Saldo insuficiente para realizar o saque. \n Saldo: {Saldo}");
+            }
+        } while (true);
+        
     }
 
     public void Depositar(decimal valor)
@@ -99,19 +106,23 @@ public class ContaCorrente : ContaBancaria
     public override void Saque(decimal valor)
     {
         decimal valorComTaxa = valor + (valor * TaxaSaque);
-        if (Saldo > valorComTaxa)
-        {
-            Saldo -= valorComTaxa;
-            Console.WriteLine($"Saque realizado com sucesso. Saldo atual: {Saldo}");
+        bool saqueRealizado = false;
 
-        }
-        else
+        do
         {
-            Console.WriteLine($"Saldo insuficiente para realizar o saque. \n Saldo: {Saldo}");
-        }
+            if (Saldo > valorComTaxa)
+            {
+                Saldo -= valorComTaxa;
+                Console.WriteLine($"Saque realizado com sucesso. Saldo atual: {Saldo}");
+                saqueRealizado = true;
+
+            }
+            else
+            {
+                Console.WriteLine($"Saldo insuficiente para realizar o saque. \n Saldo: {Saldo}");
+            }
+        } while (saqueRealizado); 
     }
-
- 
 }
 
 public class ContaPoupanca : ContaBancaria
@@ -231,9 +242,10 @@ class Program
 
     static void AcessarConta()
     {
-
+        
         Console.WriteLine("Digite o Numero da Conta:");
         string numeroContaAcesso = Console.ReadLine();
+
         Console.WriteLine("Digite a Senha:");
         int senhaAcesso = int.Parse(Console.ReadLine());
         foreach (var contaBancaria in ContasBancaria)
@@ -251,22 +263,52 @@ class Program
     }
     static void CriarConta()
     {
-        Console.WriteLine("Digite o nome do titular da conta:");
-        string nomeTitular = Console.ReadLine();
-        Console.WriteLine("Digite o valro que deseja depositar:");
-        decimal saldo = decimal.Parse(Console.ReadLine());
-        Console.WriteLine($"Digite o numero da opção: \n 1 - Conta Corrente \n 2 - Conta Poupança \n 3 - Conta Empresarial");
-        int opcaoTipoConta = int.Parse(Console.ReadLine());
-        Console.WriteLine("Digite uma senha de 6 digitos");
-        int senha = int.Parse(Console.ReadLine());
-
-        string tipoConta = opcaoTipoConta switch
+        string nomeTitular;
+        do
         {
-            1 => "Corrente",
-            2 => "Poupança",
-            3 => "Empresarial",
-            _ => throw new ArgumentException("Tipo de conta inválido")
-        };
+            Console.Write("Digite o nome do titular da conta:");
+            nomeTitular = Console.ReadLine()!;
+
+        } while (string.IsNullOrWhiteSpace(nomeTitular));
+
+
+        
+        decimal saldo = 0;
+        int senha = 0;
+        string senhaInput;
+        do
+        {
+            Console.WriteLine("Digite uma senha de 6 digitos");
+            senhaInput = Console.ReadLine()!;
+            if (senhaInput.Length == 6)
+            {
+                senha = int.Parse(senhaInput);
+                break;
+            }
+        } while (senhaInput.Length < 6 || senhaInput.Length > 6 );
+        
+
+
+
+        int opcaoTipoConta;
+        string tipoConta;
+        do
+        {
+            Console.WriteLine($"Digite o numero da opção: \n 1 - Conta Corrente \n 2 - Conta Poupança \n 3 - Conta Empresarial");
+            opcaoTipoConta = int.Parse(Console.ReadLine()!);
+
+            
+
+          
+            tipoConta = opcaoTipoConta switch
+            {
+                1 => "Corrente",
+                2 => "Poupança",
+                3 => "Empresarial",
+                _ => throw new ArgumentException("Tipo de conta inválido")
+            };
+        } while (opcaoTipoConta < 1 || opcaoTipoConta > 3);
+        
 
         ContaBancaria novaConta = null;
         if (tipoConta == "Corrente")
@@ -290,9 +332,16 @@ class Program
             ContasBancaria.Add(novaConta);
         }
     }
+
     static void Main(string[] args)
     {
-        Menu();
+        do
+        {
+            Thread.Sleep(4000);
+            Console.Clear();
+            Menu();
+
+        }while(true);
     
         
         
