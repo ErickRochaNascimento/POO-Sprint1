@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Numerics;
 using System.Security.Cryptography.X509Certificates;
 
 
@@ -36,16 +37,17 @@ public abstract class ContaBancaria
 
         do
         {
-            if (Saldo > valor)
+            if (Saldo > valor && valor != 0)
             {
                 Saldo -= valor;
                 Console.WriteLine($"Saque realizado com sucesso. Saldo atual: {Saldo}");
                 saqueRealizado = true;
-
+                break;
             }
             else
             {
                 Console.WriteLine($"Saldo insuficiente para realizar o saque. \n Saldo: {Saldo}");
+                break;
             }
         } while (true);
         
@@ -55,6 +57,7 @@ public abstract class ContaBancaria
     {
         Saldo += valor;
         Console.WriteLine($"Deposito realizado com sucesso. Saldo atual: {Saldo}");
+        
     }
 
     public virtual void LimiteEmprestimo(decimal valor)
@@ -75,6 +78,8 @@ public abstract class ContaBancaria
         }
     }
 
+
+
     public virtual void Rendimento(decimal Saldo)
     {
         Console.WriteLine("Essa conta não tem rendimento");
@@ -85,6 +90,7 @@ public abstract class ContaBancaria
     {
         Console.WriteLine($"Conta informações: \n Nome titular: {NomeTitular} \n Numero conta: {NumeroConta} \n Saldo: {Saldo} \n Tipo conta: {TipoConta}");
     }
+
 
 
 
@@ -178,11 +184,18 @@ class Program
 
     static void Menu()
     {
-        Console.WriteLine($"Digite o numero da opção:\n 1- Criar Conta \n 2- Acessar conta");
-        int opcao = int.Parse(Console.ReadLine());
+        int opcaoConta;
+        bool ehNumero;
+        string opcaoInput;
+
+
+       
         do
         {
-            switch (opcao)
+            Console.WriteLine($"Digite o numero da opção:\n 1- Criar Conta \n 2- Acessar conta");
+            opcaoInput = Console.ReadLine()!;
+            ehNumero = int.TryParse(opcaoInput, out opcaoConta);
+            switch (opcaoConta)
             {
                 case 1:
                     Console.WriteLine("Criação de conta:");
@@ -192,65 +205,128 @@ class Program
                     Console.WriteLine("Acesso a conta:");
                     AcessarConta();
                     break;
-                default:
-                    Console.WriteLine("Opção inválida, digite novamente:");
-                    break;
             }
-            if (opcao == 1 || opcao == 2)
+            if (opcaoConta >= 1 && opcaoConta <= 2 && ehNumero)
             {
                 break;
             }
-            Console.WriteLine($"Digite o numero da opção:\n 1- Criar Conta \n 2- Acessar conta");
-            opcao = int.Parse(Console.ReadLine());
-
+            else
+            {
+                Console.Clear();
+            }
+            Console.WriteLine("Opcão invalida. Tente novamente.");
         } while (true);
     }
 
     static void MenuConta(ContaBancaria contaAtual)
     {
-        Console.WriteLine($"Digite o numero da opção:\n 1- Saque \n 2- Deposito");
-        int opcaoConta = int.Parse(Console.ReadLine());
+        int opcaoConta;
+        bool ehNumero;
+        string opcaoInput;
+        
+
+
+
         do
         {
+            Console.WriteLine($"Digite o numero da opção:\n 1- Saque \n 2- Deposito \n 3- Emprestimo \n 4- Consultar rendimento");
+          
+            opcaoInput = Console.ReadLine()!;  
+            ehNumero = int.TryParse(opcaoInput, out opcaoConta);
+
             switch (opcaoConta)
             {
                 case 1:
+                    Console.Clear();
+
                     Console.WriteLine("Saque:");
-                    Console.WriteLine("Digite o valor que deseja sacar:");
+                    Console.Write("Digite o valor que deseja sacar: ");
                     decimal valorSaque = decimal.Parse(Console.ReadLine());
                     contaAtual.Saque(valorSaque);
+                    Console.WriteLine("\n\n");
+                    MenuConta(contaAtual);
                     break;
                 case 2:
+                    Console.Clear();
+
                     Console.WriteLine("Deposito:");
-              Console.WriteLine("Digite o valor que deseja depositar:");
+                    Console.Write("Digite o valor que deseja depositar: ");
                     decimal valorDeposito = decimal.Parse(Console.ReadLine());
                     contaAtual.Depositar(valorDeposito);
+                    Console.WriteLine("\n\n");
+                    MenuConta(contaAtual);
                     break;
-                default:
-                    Console.WriteLine("Opção inválida, digite novamente:");
+                case 3:
+                    Console.Clear();
+
+                    Console.WriteLine("Emprestimo:");
+                    Console.Write("Digite o valor que deseja solicitar: ");
+                    decimal valorEmprestimo = decimal.Parse(Console.ReadLine());
+                    contaAtual.LimiteEmprestimo(valorEmprestimo);
+                    Console.WriteLine("\n\n");
+                    MenuConta(contaAtual);
                     break;
+                case 4:
+                    Console.Clear();
+
+                    Console.WriteLine("Consultar Rendimento:");
+                    contaAtual.Rendimento(contaAtual.Saldo);
+                    Console.WriteLine("\n\n");
+                    MenuConta(contaAtual);
+                    break;
+        
             }
-            if (opcaoConta == 1 || opcaoConta == 2)
+            if (opcaoConta >= 1 && opcaoConta <= 4 && ehNumero)
             {
                 break;
             }
-            Console.WriteLine($"Digite o numero da opção:\n 1- Saque \n 2- Deposito");
-            opcaoConta = int.Parse(Console.ReadLine());
+            else
+            {
+
+                Console.Clear();
+            }
+                Console.WriteLine("Opcão invalida. Tente novamente.");
 
         } while (true);
     }
 
     static void AcessarConta()
     {
-        
-        Console.WriteLine("Digite o Numero da Conta:");
-        string numeroContaAcesso = Console.ReadLine();
 
-        Console.WriteLine("Digite a Senha:");
-        int senhaAcesso = int.Parse(Console.ReadLine());
+
+        int numeroContaConferir = 0;
+        string numeroContaInput;
+        
+            Console.Write("Digite o Numero da Conta: ");
+            numeroContaInput = Console.ReadLine()!;
+            numeroContaConferir = int.Parse(numeroContaInput);
+
+
+
+        int senha = 0;
+        string senhaInput;
+        bool ehNumero;
+
+        do
+        {
+            Console.Write("Digite a senha de 6 digitos: ");
+            senhaInput = Console.ReadLine()!;
+            ehNumero = int.TryParse(senhaInput, out senha);
+
+            if (!string.IsNullOrWhiteSpace(senhaInput) && senhaInput.Length == 6 && ehNumero)
+            {
+                break;
+            }
+            else
+            {
+                Console.WriteLine("Senha incorreta. Tente novamente.");
+            }
+        } while (true);
+
+
         foreach (var contaBancaria in ContasBancaria)
         {
-            if (contaBancaria.NumeroConta.ToString() == numeroContaAcesso && contaBancaria.Senha == senhaAcesso)
+            if (contaBancaria.NumeroConta.ToString() == numeroContaInput && contaBancaria.Senha == senha)
             {
                 Console.WriteLine("Acesso concedido à conta.");
                 contaBancaria.ExibirInformacaoConta();
@@ -259,14 +335,15 @@ class Program
             }
         }
         Console.WriteLine("Conta não encontrada.");
-
+        Console.Write("Tente novamente: ");
     }
+
     static void CriarConta()
     {
         string nomeTitular;
         do
         {
-            Console.Write("Digite o nome do titular da conta:");
+            Console.Write("Digite o nome do titular da conta: ");
             nomeTitular = Console.ReadLine()!;
 
         } while (string.IsNullOrWhiteSpace(nomeTitular));
@@ -276,16 +353,24 @@ class Program
         decimal saldo = 0;
         int senha = 0;
         string senhaInput;
+        bool ehNumero;
+
+
         do
         {
-            Console.WriteLine("Digite uma senha de 6 digitos");
+            Console.Write("Crie uma senha de 6 digitos. \n A senha dever ser numerica. Exemplo: 123456 \n Digite: ");
             senhaInput = Console.ReadLine()!;
-            if (senhaInput.Length == 6)
+            ehNumero = int.TryParse(senhaInput, out senha);
+
+            if (!string.IsNullOrWhiteSpace(senhaInput) && senhaInput.Length == 6 && ehNumero)
             {
-                senha = int.Parse(senhaInput);
-                break;
+                 break;
             }
-        } while (senhaInput.Length < 6 || senhaInput.Length > 6 );
+            else
+            {
+                Console.WriteLine("Senha não atende os requisitos. Tente novamente.");
+            }
+        } while (true);
         
 
 
@@ -294,7 +379,7 @@ class Program
         string tipoConta;
         do
         {
-            Console.WriteLine($"Digite o numero da opção: \n 1 - Conta Corrente \n 2 - Conta Poupança \n 3 - Conta Empresarial");
+            Console.WriteLine($"Digite o numero da opção: \n 1 - Conta Corrente \n 2 - Conta Poupança \n 3 - Conta Empresarial ");
             opcaoTipoConta = int.Parse(Console.ReadLine()!);
 
             
@@ -335,6 +420,7 @@ class Program
 
     static void Main(string[] args)
     {
+        
         do
         {
             Thread.Sleep(4000);
