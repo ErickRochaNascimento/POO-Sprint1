@@ -68,7 +68,7 @@ public abstract class ContaBancaria
             Console.WriteLine($"Limite de emprestimo de {limiteEmprestimo}");
             for(int i = 0; i < 5; i++)
             {
-                Console.WriteLine($"Parcela {i + 1}: {valor / 5}");
+                Console.WriteLine($"Parcela {i + 1}: {valor / 6}");
             }
 
         }
@@ -83,6 +83,7 @@ public abstract class ContaBancaria
     public virtual void Rendimento(decimal Saldo)
     {
         Console.WriteLine("Essa conta não tem rendimento");
+        Console.WriteLine($"Saldo: {Saldo}");
     }
 
 
@@ -111,7 +112,8 @@ public class ContaCorrente : ContaBancaria
 
     public override void Saque(decimal valor)
     {
-        decimal valorComTaxa = valor + (valor * TaxaSaque);
+        decimal valorTaxa = valor * TaxaSaque;
+        decimal valorComTaxa = valor + TaxaSaque;
         bool saqueRealizado = false;
 
         do
@@ -126,6 +128,7 @@ public class ContaCorrente : ContaBancaria
             else
             {
                 Console.WriteLine($"Saldo insuficiente para realizar o saque. \n Saldo: {Saldo}");
+                Console.WriteLine($"Taxa de Saque: {valorTaxa}");
             }
         } while (saqueRealizado); 
     }
@@ -140,8 +143,9 @@ public class ContaPoupanca : ContaBancaria
 
     public override void Rendimento(decimal Saldo)
     {
-        Saldo += Saldo * 0.5m;
-        Console.WriteLine($"Saldo Atual: {Saldo}");
+        Saldo += Saldo * 0.1m;
+        decimal rendeu = Saldo * 0.1m;
+        Console.WriteLine($"Saldo Atual: {Saldo} | Rendimento: {rendeu}");
     }
     
    
@@ -192,7 +196,7 @@ class Program
        
         do
         {
-            Console.WriteLine($"Digite o numero da opção:\n 1- Criar Conta \n 2- Acessar conta");
+            Console.WriteLine($"Digite o numero da opção:\n 1 Criar Conta \n 2 Acessar conta");
             opcaoInput = Console.ReadLine()!;
             ehNumero = int.TryParse(opcaoInput, out opcaoConta);
             switch (opcaoConta)
@@ -229,7 +233,7 @@ class Program
 
         do
         {
-            Console.WriteLine($"Digite o numero da opção:\n 1- Saque \n 2- Deposito \n 3- Emprestimo \n 4- Consultar rendimento");
+            Console.WriteLine($"Digite o numero da opção:\n 1 Saque \n 2 Deposito \n 3 Emprestimo \n 4 Consultar saldo");
           
             opcaoInput = Console.ReadLine()!;  
             ehNumero = int.TryParse(opcaoInput, out opcaoConta);
@@ -240,8 +244,32 @@ class Program
                     Console.Clear();
 
                     Console.WriteLine("Saque:");
-                    Console.Write("Digite o valor que deseja sacar: ");
-                    decimal valorSaque = decimal.Parse(Console.ReadLine());
+
+                    bool NumeroSaque;
+                    decimal valorSaque;
+                    string valorSaqueInput;
+
+                    do
+                    {
+                        Console.Write("Digite o valor que deseja sacar: ");
+                        valorSaqueInput = Console.ReadLine()!;
+                        NumeroSaque = decimal.TryParse(valorSaqueInput, out valorSaque);
+
+                        if(NumeroSaque)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Valor de saque inválido. Tente novamente.");
+                            Console.Clear();
+                        }
+
+
+
+                    } while (true);
+                    
+
                     contaAtual.Saque(valorSaque);
                     Console.WriteLine("\n\n");
                     MenuConta(contaAtual);
@@ -269,7 +297,7 @@ class Program
                 case 4:
                     Console.Clear();
 
-                    Console.WriteLine("Consultar Rendimento:");
+                    Console.WriteLine("Consultar Saldo:");
                     contaAtual.Rendimento(contaAtual.Saldo);
                     Console.WriteLine("\n\n");
                     MenuConta(contaAtual);
@@ -358,7 +386,7 @@ class Program
 
         do
         {
-            Console.Write("Crie uma senha de 6 digitos. \n A senha dever ser numerica. Exemplo: 123456 \n Digite: ");
+            Console.Write("Crie uma senha de 6 digitos. \nA senha dever ser numerica. Exemplo: 123456 \nDigite: ");
             senhaInput = Console.ReadLine()!;
             ehNumero = int.TryParse(senhaInput, out senha);
 
@@ -420,10 +448,10 @@ class Program
 
     static void Main(string[] args)
     {
-        
+        Console.WriteLine("=== BANCO ===");
         do
         {
-            Thread.Sleep(4000);
+            Thread.Sleep(3500);
             Console.Clear();
             Menu();
 
