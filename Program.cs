@@ -278,25 +278,73 @@ class Program
                     Console.Clear();
 
                     Console.WriteLine("Deposito:");
-                    Console.Write("Digite o valor que deseja depositar: ");
-                    decimal valorDeposito = decimal.Parse(Console.ReadLine());
+
+                    bool NumeroDeposito;
+                    decimal valorDeposito;
+                    string valorDepositoInput;
+
+                    do
+                    {
+                        Console.Write("Digite o valor que deseja depositar: ");
+                        valorDepositoInput = Console.ReadLine();
+                        NumeroDeposito = decimal.TryParse(valorDepositoInput, out valorDeposito);
+
+                        if (NumeroDeposito)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Valor de deposito inválido. Tente novamente.");
+                            Console.Clear();
+                        }
+
+
+
+                    } while (true);
+
+
+                    
                     contaAtual.Depositar(valorDeposito);
                     Console.WriteLine("\n\n");
                     MenuConta(contaAtual);
                     break;
                 case 3:
                     Console.Clear();
-
                     Console.WriteLine("Emprestimo:");
-                    Console.Write("Digite o valor que deseja solicitar: ");
-                    decimal valorEmprestimo = decimal.Parse(Console.ReadLine());
+
+                    bool NumeroEmprestimo;
+                    decimal valorEmprestimo;
+                    string valorEmprestimoInput;
+
+                    do
+                    {
+                        Console.Write("Digite o valor que deseja solicitar: ");
+                        valorEmprestimoInput = Console.ReadLine();
+                        NumeroEmprestimo = decimal.TryParse(valorEmprestimoInput, out valorEmprestimo);
+
+                        if (NumeroEmprestimo)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Valor de emprestimo inválido. Tente novamente.");
+                            Console.Clear();
+                        }
+
+
+
+                    } while (true);
+
+
+
                     contaAtual.LimiteEmprestimo(valorEmprestimo);
                     Console.WriteLine("\n\n");
                     MenuConta(contaAtual);
                     break;
                 case 4:
                     Console.Clear();
-
                     Console.WriteLine("Consultar Saldo:");
                     contaAtual.Rendimento(contaAtual.Saldo);
                     Console.WriteLine("\n\n");
