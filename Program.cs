@@ -94,13 +94,6 @@ public abstract class ContaBancaria
     {
         Console.WriteLine($"Conta informações: \n Nome titular: {NomeTitular} \n Numero conta: {NumeroConta} \n Saldo: {Saldo} \n Tipo conta: {TipoConta}");
     }
-
-
-
-
-
-  
-
 }
 
 
@@ -146,10 +139,6 @@ public class ContaPoupanca : ContaBancaria
         Saldo += rendeu;
         Console.WriteLine($"Saldo Atual: {Saldo} | Rendimento: {rendeu}");
     }
-    
-   
-    
-
 }
 
 public class ContaEmpresarial : ContaBancaria
@@ -190,11 +179,13 @@ class Program
         int opcaoConta;
         bool ehNumero;
         string opcaoInput;
+        bool continuarApp = true;
 
 
        
-        do
+        while (continuarApp)
         {
+            Console.Clear();
             Console.WriteLine($"Digite o numero da opção:\n 1 Criar Conta \n 2 Acessar conta");
             opcaoInput = Console.ReadLine()!;
             ehNumero = int.TryParse(opcaoInput, out opcaoConta);
@@ -218,7 +209,7 @@ class Program
                 Console.Clear();
             }
             Console.WriteLine("Opcão invalida. Digite um valor correspondente ao menu.");
-        } while (true);
+        }
     }
 
     static void MenuConta(ContaBancaria contaAtual)
@@ -226,12 +217,15 @@ class Program
         int opcaoConta;
         bool ehNumero;
         string opcaoInput;
+        bool continuarMenu = true;
         
 
 
 
-        do
+        while (continuarMenu)
         {
+            Console.Clear();
+            Console.WriteLine($"=== Menu da Conta {contaAtual.NumeroConta} ===");
             Console.WriteLine($"Digite o numero da opção:\n 1 Saque \n 2 Deposito \n 3 Emprestimo \n 4 Consultar saldo");
           
             opcaoInput = Console.ReadLine()!;  
@@ -362,7 +356,7 @@ class Program
             }
                 Console.WriteLine("Opcão invalida. Tente novamente.");
 
-        } while (true);
+        };
     }
 
     static void AcessarConta()
@@ -519,8 +513,7 @@ class Program
         Console.WriteLine("=== BANCO ===");
         do
         {
-            Thread.Sleep(3500);
-            Console.Clear();
+            Console.WriteLine("=== BANCO ===");
             Menu();
 
         }while(true);
