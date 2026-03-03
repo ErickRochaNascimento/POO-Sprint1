@@ -37,7 +37,7 @@ public abstract class ContaBancaria
 
         do
         {
-            if (Saldo > valor && valor != 0)
+            if (Saldo >= valor && valor > 0)
             {
                 Saldo -= valor;
                 Console.WriteLine($"Saque realizado com sucesso. Saldo atual: {Saldo}");
@@ -55,9 +55,17 @@ public abstract class ContaBancaria
 
     public void Depositar(decimal valor)
     {
-        Saldo += valor;
-        Console.WriteLine($"Deposito realizado com sucesso. Saldo atual: {Saldo}");
-        
+        if (valor > 0)
+        {
+            Saldo += valor;
+            Console.WriteLine($"Deposito realizado com sucesso. Saldo atual: {Saldo}");
+        }
+        else
+        {
+            Console.WriteLine("Valor de deposito inválido. Tente novamente.");
+
+
+        }
     }
 
     public virtual void LimiteEmprestimo(decimal valor)
@@ -80,7 +88,7 @@ public abstract class ContaBancaria
 
 
 
-    public virtual void Rendimento(decimal Saldo)
+    public virtual void Rendimento()
     {
         Console.WriteLine("Essa conta não tem rendimento");
         Console.WriteLine($"Saldo: {Saldo}");
@@ -113,12 +121,12 @@ public class ContaCorrente : ContaBancaria
     public override void Saque(decimal valor)
     {
         decimal valorTaxa = valor * TaxaSaque;
-        decimal valorComTaxa = valor + TaxaSaque;
+        decimal valorComTaxa = valor + valorTaxa;
         bool saqueRealizado = false;
 
         do
         {
-            if (Saldo > valorComTaxa)
+            if (Saldo >= valorComTaxa && valor > 0)
             {
                 Saldo -= valorComTaxa;
                 Console.WriteLine($"Saque realizado com sucesso. Saldo atual: {Saldo}");
@@ -141,10 +149,10 @@ public class ContaPoupanca : ContaBancaria
     }
     
 
-    public override void Rendimento(decimal Saldo)
+    public override void Rendimento()
     {
-        Saldo += Saldo * 0.1m;
         decimal rendeu = Saldo * 0.1m;
+        Saldo += rendeu;
         Console.WriteLine($"Saldo Atual: {Saldo} | Rendimento: {rendeu}");
     }
     
@@ -346,7 +354,7 @@ class Program
                 case 4:
                     Console.Clear();
                     Console.WriteLine("Consultar Saldo:");
-                    contaAtual.Rendimento(contaAtual.Saldo);
+                    contaAtual.Rendimento();
                     Console.WriteLine("\n\n");
                     MenuConta(contaAtual);
                     break;
