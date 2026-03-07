@@ -15,7 +15,7 @@
         if (Saldo >= valorComTaxa && valor > 0)
         {
             Saldo -= valorComTaxa;
-            Console.WriteLine($"Saque realizado com sucesso. Saldo atual: {Saldo}");
+            Console.WriteLine($"Saque realizado com sucesso. \nSaldo atual: {Saldo} | Valor do Saque com Taxa: {valorComTaxa}");
 
         }
         else

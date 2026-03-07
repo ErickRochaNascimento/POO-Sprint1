@@ -37,7 +37,7 @@
         }
         else
         {
-            Console.WriteLine($"Saldo insuficiente para realizar o saque. \n Saldo: {Saldo}");
+            Console.WriteLine($"Saldo insuficiente para realizar o saque. \nSaldo: {Saldo}");
         }
 
     }
@@ -71,7 +71,7 @@
         }
         else
         {
-            Console.WriteLine($"Pedido maior que o limite. \n Limite emprestimo: {limiteEmprestimo}");
+            Console.WriteLine($"Pedido maior que o limite. \nLimite emprestimo: {limiteEmprestimo}");
         }
     }
 
