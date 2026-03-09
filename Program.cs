@@ -291,6 +291,7 @@ class Program
             novaConta.ExibirInformacaoConta();
             ContasBancaria.Add(novaConta);
             Console.WriteLine("Conta criada com sucesso!");
+            Console.Clear();
             MenuConta(novaConta);
         }
         
