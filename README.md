@@ -60,6 +60,9 @@ Para compilar e executar este projeto, você precisará ter o SDK do .NET 10.0 i
 *   **Interface de Usuário**: A interação é exclusivamente via console, sem interface gráfica.
 *   **Segurança**: As senhas são armazenadas em texto simples e não há mecanismos avançados de segurança.
 
-## Autor
+---
 
-Desenvolvido por Manus AI com base na análise do código-fonte do projeto `POO-Sprint1` de ErickRochaNascimento.
+## 🧑‍💻 Autor
+
+**Erick Rocha Nascimento**  
+🔗 [LinkedIn](https://www.linkedin.com/in/erickrochanascimento) | [GitHub](https://github.com/ErickRochaNascimento)
